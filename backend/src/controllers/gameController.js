@@ -1,4 +1,5 @@
 import axios from "axios";
+import calculateHand from "../utils/calculateHand.js";
 
 const createGame = async (req, res) => {
   try {
@@ -18,7 +19,19 @@ const createGame = async (req, res) => {
     const playerCards = playerResponse.data.cards;
     const dealerCards = dealerResponse.data.cards;
 
-    res.status(200).json({ deckId, playerCards, dealerCards });
+    const playerTotal = calculateHand(playerCards);
+    const dealerTotal = calculateHand(dealerCards);
+
+    let status = "playing";
+
+    res.status(200).json({
+      deckId,
+      playerCards,
+      dealerCards,
+      playerTotal,
+      dealerTotal,
+      status,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
