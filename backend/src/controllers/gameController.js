@@ -69,4 +69,49 @@ const hit = async (req, res) => {
   }
 };
 
-export { createGame, hit };
+const stand = async (req, res) => {
+  try {
+    const { deckId, playerCards, dealerCards } = req.body;
+
+    const playerTotal = calculateHand(playerCards);
+
+    let updatedDealerCards = [...dealerCards];
+    let dealerTotal = calculateHand(updatedDealerCards);
+
+    while (dealerTotal < 17) {
+      const response = await axios.get(
+        `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`,
+      );
+      const card = response.data.cards[0];
+
+      updatedDealerCards.push(card);
+
+      dealerTotal = calculateHand(updatedDealerCards);
+    }
+
+    let status;
+
+    if (dealerTotal > 21) {
+      status = "dealer_bust";
+    } else if (playerTotal > dealerTotal) {
+      status = "player_win";
+    } else if (playerTotal < dealerTotal) {
+      status = "dealer_win";
+    } else {
+      status = "push";
+    }
+
+    res.status(200).json({
+      deckId,
+      playerCards,
+      dealerCards: updatedDealerCards,
+      playerTotal,
+      dealerTotal,
+      status,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { createGame, hit, stand };
