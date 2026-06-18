@@ -8,7 +8,7 @@ const calculateHand = (cards) => {
     } else if (
       card.value === "KING" ||
       card.value === "QUEEN" ||
-      card.value === "Jack"
+      card.value === "JACK"
     ) {
       total += 10;
     } else {
