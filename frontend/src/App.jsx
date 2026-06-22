@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { hitCard, standCard, startNewGame } from "./api/gameApi";
+import Hand from "./components/Hand";
 
 const App = () => {
   const [game, setGame] = useState(null);
@@ -69,8 +70,24 @@ const App = () => {
 
       {game && (
         <div>
-          {/* Player's hand */}
-          {/* Action buttons */}
+          <Hand
+            label="Dealer Hand"
+            cards={game.dealerCards}
+            total={game.dealerTotal}
+          />
+          <Hand
+            label="Player Hand"
+            cards={game.playerCards}
+            total={game.playerTotal}
+          />
+          <div>
+            <button onClick={handleHit} disabled={loading}>
+              Hit
+            </button>
+            <button onClick={handleStand} disabled={loading}>
+              Stand
+            </button>
+          </div>
         </div>
       )}
     </div>
