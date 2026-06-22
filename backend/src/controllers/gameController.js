@@ -22,6 +22,8 @@ const createGame = async (req, res) => {
     const playerTotal = calculateHand(playerCards);
     const dealerTotal = calculateHand(dealerCards);
 
+    const remaining = dealerResponse.data.remaining;
+
     let status = "playing";
     if (playerTotal === 21 && dealerTotal === 21) {
       status = "push";
@@ -37,6 +39,7 @@ const createGame = async (req, res) => {
       dealerCards,
       playerTotal,
       dealerTotal,
+      remaining,
       status,
     });
   } catch (error) {
@@ -51,6 +54,7 @@ const hit = async (req, res) => {
       `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`,
     );
     const card = response.data.cards[0];
+    const remaining = response.data.remaining;
 
     const updatedPlayerCards = [...playerCards, card];
 
@@ -69,6 +73,7 @@ const hit = async (req, res) => {
       dealerCards,
       playerTotal,
       dealerTotal,
+      remaining,
       status,
     });
   } catch (error) {
@@ -78,18 +83,21 @@ const hit = async (req, res) => {
 
 const stand = async (req, res) => {
   try {
-    const { deckId, playerCards, dealerCards } = req.body;
+    const { deckId, playerCards, dealerCards, remaining: previousRemaining } =
+      req.body;
 
     const playerTotal = calculateHand(playerCards);
 
     let updatedDealerCards = [...dealerCards];
     let dealerTotal = calculateHand(updatedDealerCards);
+    let remaining = previousRemaining;
 
     while (dealerTotal < 17) {
       const response = await axios.get(
         `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`,
       );
       const card = response.data.cards[0];
+      remaining = response.data.remaining;
 
       updatedDealerCards.push(card);
 
@@ -114,6 +122,7 @@ const stand = async (req, res) => {
       dealerCards: updatedDealerCards,
       playerTotal,
       dealerTotal,
+      remaining,
       status,
     });
   } catch (error) {

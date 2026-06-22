@@ -59,6 +59,12 @@ const App = () => {
     <div className="min-h-screen bg-green-800 text-white flex flex-col items-center">
       <h1 className="text-4xl font-black mb-8 tracking-wide">Blackjack Game</h1>
 
+      {game?.remaining === 0 && (
+        <p className="bg-red-600 text-white px-4 py-2 rounded mb-4">
+          No more cards remaining. Please start a new game.
+        </p>
+      )}
+
       {error && (
         <p className="bg-red-600 text-white px-4 py-2 rounded mb-4">{error}</p>
       )}
@@ -75,6 +81,9 @@ const App = () => {
 
       {game && (
         <div className="w-full max-w-2xl flex flex-col gap-8">
+          <div className="text-center text-lg font-semibold text-yellow-300">
+            Cards Remaining: {game.remaining}
+          </div>
           <Hand
             label="Dealer Hand"
             cards={game.dealerCards}
