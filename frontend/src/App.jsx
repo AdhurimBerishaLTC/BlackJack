@@ -55,7 +55,26 @@ const App = () => {
     }
   };
 
-  return <div>App</div>;
+  return (
+    <div>
+      <h1>Blackjack Game</h1>
+
+      {error && <p>{error}</p>}
+
+      {!game && (
+        <button onClick={handleStartGame} disabled={loading}>
+          {loading ? "Starting game..." : "Start Game"}
+        </button>
+      )}
+
+      {game && (
+        <div>
+          {/* Player's hand */}
+          {/* Action buttons */}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default App;
