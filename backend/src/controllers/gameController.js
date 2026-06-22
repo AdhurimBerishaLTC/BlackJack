@@ -23,6 +23,13 @@ const createGame = async (req, res) => {
     const dealerTotal = calculateHand(dealerCards);
 
     let status = "playing";
+    if (playerTotal === 21 && dealerTotal === 21) {
+      status = "push";
+    } else if (playerTotal === 21) {
+      status = "player_win";
+    } else if (dealerTotal === 21) {
+      status = "dealer_win";
+    }
 
     res.status(200).json({
       deckId,
