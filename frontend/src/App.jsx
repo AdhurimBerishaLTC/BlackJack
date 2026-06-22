@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { hitCard, standCard, startNewGame } from "./api/gameApi";
 import Hand from "./components/Hand";
+import GameControls from "./components/GameControls";
 
 const App = () => {
   const [game, setGame] = useState(null);
@@ -81,12 +82,11 @@ const App = () => {
             total={game.playerTotal}
           />
           <div>
-            <button onClick={handleHit} disabled={loading}>
-              Hit
-            </button>
-            <button onClick={handleStand} disabled={loading}>
-              Stand
-            </button>
+            <GameControls
+              onHit={handleHit}
+              onStand={handleStand}
+              disabled={loading || game.status !== "playing"}
+            />
           </div>
         </div>
       )}
